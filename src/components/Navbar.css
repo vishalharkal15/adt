@@ -1,129 +1,131 @@
-/* Make navbar full-width, fixed at top */
+/* Base Navbar */
 .navbar {
   width: 100%;
-  position: fixed;
+  background: linear-gradient(90deg, #111827, #1f2937);
+  color: #fff;
+  position: sticky;
   top: 0;
-  left: 0;
-  z-index: 1000;
-  background: linear-gradient(90deg, #0f172a, #1e3a8a, #312e81);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
-  color: white;
-  font-family: "Poppins", sans-serif;
+  z-index: 100;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
   transition: all 0.3s ease;
 }
 
-/* Container ensures spacing and alignment */
-.navbar-container {
-  width: 100%;
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 14px 32px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+.navbar:hover {
+  background: linear-gradient(90deg, #0f172a, #1e293b);
 }
 
-/* Brand text */
+.navbar-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  height: 60px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Brand */
 .navbar-brand {
   font-size: 1.6rem;
-  font-weight: 700;
-  background: linear-gradient(90deg, #38bdf8, #3b82f6, #6366f1);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  font-weight: bold;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color: #38bdf8;
   text-decoration: none;
-  transition: opacity 0.3s;
+  transition: transform 0.3s ease;
 }
 
 .navbar-brand:hover {
-  opacity: 0.85;
+  transform: scale(1.05);
+  color: #22c55e;
 }
 
-/* Links (desktop) */
+/* Links */
 .nav-links {
   display: flex;
-  gap: 2rem;
-  transition: all 0.3s ease;
+  gap: 25px;
+  align-items: center;
 }
 
 .nav-links a {
-  color: white;
+  color: #fff;
   text-decoration: none;
-  font-size: 1.1rem;
-  font-weight: 500;
+  font-weight: bold;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 1.4rem; /* same as brand font size */
+  padding: 8px 12px;
+  border-radius: 6px;
+  transition: all 0.3s ease;
   position: relative;
-  transition: color 0.3s ease;
 }
 
 .nav-links a::after {
   content: "";
-  position: absolute;
-  bottom: -4px;
-  left: 0;
+  display: block;
   height: 2px;
-  width: 0%;
-  background-color: #38bdf8;
-  transition: width 0.3s ease;
+  width: 0;
+  background: #22c55e;
+  transition: width 0.3s;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+}
+
+.nav-links a:hover {
+  color: #22c55e;
 }
 
 .nav-links a:hover::after {
   width: 100%;
+  transition: width 0.3s;
 }
 
-.nav-links a:hover {
-  color: #38bdf8;
-}
-
-/* Hamburger button */
+/* Hamburger */
 .hamburger {
   display: none;
   flex-direction: column;
-  cursor: pointer;
   gap: 5px;
-  transition: all 0.3s ease;
+  cursor: pointer;
+  z-index: 110;
 }
 
 .hamburger span {
-  width: 26px;
+  width: 25px;
   height: 3px;
-  background-color: white;
-  border-radius: 5px;
-  transition: all 0.3s ease;
+  background: #fff;
+  border-radius: 2px;
+  transition: all 0.4s ease;
 }
 
 .hamburger.open span:nth-child(1) {
-  transform: rotate(45deg) translateY(8px);
+  transform: rotate(45deg) translate(5px, 5px);
 }
-
 .hamburger.open span:nth-child(2) {
   opacity: 0;
 }
-
 .hamburger.open span:nth-child(3) {
-  transform: rotate(-45deg) translateY(-8px);
+  transform: rotate(-45deg) translate(5px, -5px);
 }
 
-/* Mobile menu */
+/* Mobile Styles */
 @media (max-width: 768px) {
   .nav-links {
     position: absolute;
-    top: 64px;
-    left: 0;
-    width: 100%;
+    top: 60px;
+    right: 0;
+    background: #1f2937;
     flex-direction: column;
-    align-items: center;
-    background: rgba(17, 24, 39, 0.95);
-    backdrop-filter: blur(10px);
-    gap: 1.5rem;
-    padding: 1rem 0;
-    max-height: 0;
-    overflow: hidden;
-    opacity: 0;
-    transition: all 0.4s ease;
+    width: 220px;
+    padding: 15px 0;
+    gap: 15px;
+    display: none;
+    border-left: 2px solid #38bdf8;
+    box-shadow: -2px 2px 15px rgba(0,0,0,0.4);
+    border-radius: 0 0 0 12px;
   }
 
   .nav-links.active {
-    max-height: 300px;
-    opacity: 1;
+    display: flex;
+    animation: slideIn 0.4s ease forwards;
   }
 
   .hamburger {
@@ -131,9 +133,14 @@
   }
 }
 
-/* Add spacing below navbar for page content */
-body {
-  margin: 0;
-  padding-top: 64px; /* prevent navbar overlap with content */
-  background-color: #f5f6fa;
+/* Slide in animation */
+@keyframes slideIn {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
 }

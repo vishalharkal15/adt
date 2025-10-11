@@ -5,7 +5,7 @@ import base64
 import bcrypt
 from flask import request, jsonify
 from PIL import Image
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 import numpy as np
 from database import Student
 
@@ -217,3 +217,96 @@ def register_routes(app, db, Attendance, detector, embedder):
             return jsonify({"message": "Password updated successfully!"})
         else:
             return jsonify({"error": "Old password is incorrect"}), 401
+    
+    @app.route("/api/students-today", methods=["GET"])
+    def students_today():
+        today_str = date.today().isoformat()  # "YYYY-MM-DD"
+        try:
+            count = Attendance.query.filter_by(date=today_str).count()
+            return jsonify({"count": count})
+        except Exception as e:
+            return jsonify({"error": str(e)}), 500
+        
+    @app.route("/api/total-students", methods=["GET"])
+    def total_students():
+        try:
+            count = Student.query.count()
+            return jsonify({"count": count})
+        except Exception as e:
+            return jsonify({"error": str(e)}), 500
+
+    @app.route("/api/weekly-attendance", methods=["GET"])
+    def weekly_attendance():
+        """
+        Returns attendance count for the selected week.
+        Query param: offset (integer)
+        - offset=0 → current week
+        - offset=-1 → last week
+        - offset=1 → next week
+        Response:
+        {
+          "dates": ["2025-10-06", "2025-10-07", ...],
+          "counts": [5, 8, 7, 3, 9, 2, 0]
+        }
+        """
+        try:
+            offset = int(request.args.get("offset", 0))
+
+            today = date.today()
+            start_of_week = today - timedelta(days=today.weekday())  # Monday of current week
+            target_start = start_of_week + timedelta(weeks=offset)
+            target_end = target_start + timedelta(days=6)
+
+            # Prepare a mapping for 7 days in the target week
+            daily_counts = {
+                (target_start + timedelta(days=i)): 0 for i in range(7)
+            }
+
+            # Fetch attendance records for this week
+            records = (
+                Attendance.query
+                .filter(Attendance.date >= target_start.strftime("%Y-%m-%d"))
+                .filter(Attendance.date <= target_end.strftime("%Y-%m-%d"))
+                .all()
+            )
+
+            # Count attendance per day
+            for record in records:
+                record_date = datetime.strptime(record.date, "%Y-%m-%d").date()
+                if record_date in daily_counts:
+                    daily_counts[record_date] += 1
+
+            # Build response
+            response = {
+                "dates": [d.strftime("%Y-%m-%d") for d in daily_counts.keys()],
+                "counts": list(daily_counts.values())
+            }
+
+            return jsonify(response)
+
+        except Exception as e:
+            print("Error in /api/weekly-attendance:", e)
+            return jsonify({"error": str(e)}), 500
+
+
+        
+    @app.route("/api/students-absent-today", methods=["GET"])
+    def students_absent_today():
+        try:
+            today_str = date.today().strftime("%Y-%m-%d")
+
+            # Get all students
+            all_students = Student.query.all()
+            all_names = set(student.name for student in all_students)
+
+            # Get students who have attendance today
+            present_records = Attendance.query.filter_by(date=today_str).all()
+            present_names = set(record.student for record in present_records)
+
+            # Absent students = all - present
+            absent_names = all_names - present_names
+            absent_count = len(absent_names)
+
+            return jsonify({"count": absent_count, "absent_students": list(absent_names)})
+        except Exception as e:
+            return jsonify({"error": str(e)}), 500

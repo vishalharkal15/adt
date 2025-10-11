@@ -1,9 +1,13 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import "./Navbar.css";
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const location = useLocation();
+
+  // Check if current route is admin/dashboard
+  const onAdminPage = location.pathname === "/admin" || location.pathname === "/dashboard";
 
   return (
     <nav className="navbar">
@@ -13,11 +17,17 @@ export default function Navbar() {
           Versatile Attendance System
         </Link>
 
-        {/* Desktop Links */}
+        {/* Desktop & Mobile Links */}
         <div className={`nav-links ${isOpen ? "active" : ""}`}>
-          <Link to="/admin" onClick={() => setIsOpen(false)}>
-            Admin Panel
-          </Link>
+          {onAdminPage ? (
+            <Link to="/enroll" onClick={() => setIsOpen(false)}>
+              Enroll
+            </Link>
+          ) : (
+            <Link to="/admin" onClick={() => setIsOpen(false)}>
+              Admin Panel
+            </Link>
+          )}
         </div>
 
         {/* Hamburger Menu */}
