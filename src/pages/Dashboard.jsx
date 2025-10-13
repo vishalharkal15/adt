@@ -26,6 +26,7 @@ export default function Dashboard() {
           WebkitTextFillColor: "transparent",
           fontWeight: "700",
           letterSpacing: "1px",
+          paddingTop: "6%"
         }}
       >
         Admin Dashboard

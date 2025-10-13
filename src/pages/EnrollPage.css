@@ -11,6 +11,13 @@
   color: #fff;
   animation: bgGradient 15s ease infinite;
 }
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow: auto; /* Allow scrolling */
+}
+
 
 /* Background gradient animation */
 @keyframes bgGradient {
