@@ -1,0 +1,127 @@
+╔══════════════════════════════════════════════════════════════════╗
+║              RAILWAY DEPLOYMENT - QUICK REFERENCE                ║
+╚══════════════════════════════════════════════════════════════════╝
+
+┌─────────────────────────────────────────────────────────────────┐
+│ 🧠 BACKEND SERVICE (Flask)                                      │
+└─────────────────────────────────────────────────────────────────┘
+
+Repository:        vishalharkal15/adt
+Root Directory:    facenet
+Builder:           Nixpacks (auto)
+Build Command:     (empty - uses requirements.txt)
+Start Command:     gunicorn app:app
+Runtime:           python-3.12.3 (from runtime.txt)
+
+Environment Variables:
+  PORT             (Auto-provided by Railway)
+
+Domain:            https://adt.up.railway.app
+                   👆 COPY THIS FOR FRONTEND CONFIG
+
+┌─────────────────────────────────────────────────────────────────┐
+│ ⚛️  FRONTEND SERVICE (React + Vite)                             │
+└─────────────────────────────────────────────────────────────────┘
+
+Repository:        vishalharkal15/adt
+Root Directory:    .
+Builder:           Nixpacks (auto)
+Build Command:     npm install && npm run build
+Start Command:     npm start
+Output Directory:  dist
+
+Environment Variables: ⚠️ REQUIRED
+  VITE_API_URL     https://adt.up.railway.app
+                   👆 USE BACKEND URL FROM ABOVE
+
+Domain:            https://adt-frontend.up.railway.app
+                   👆 YOUR PUBLIC APP URL
+
+┌─────────────────────────────────────────────────────────────────┐
+│ 📋 DEPLOYMENT CHECKLIST                                         │
+└─────────────────────────────────────────────────────────────────┘
+
+Backend:
+  ✅ Push code to GitHub
+  ✅ Create Railway project from repo
+  ✅ Set root directory: facenet
+  ✅ Generate domain
+  ✅ Test: curl https://adt.up.railway.app/api/total-students
+
+Frontend:
+  ✅ Add new service (same project, same repo)
+  ✅ Set root directory: .
+  ✅ Add VITE_API_URL environment variable
+  ✅ Generate domain
+  ✅ Open in browser and test
+
+┌─────────────────────────────────────────────────────────────────┐
+│ 🔧 FILES CHECKLIST                                              │
+└─────────────────────────────────────────────────────────────────┘
+
+Backend (facenet/):
+  ✅ Procfile              → web: gunicorn app:app
+  ✅ runtime.txt           → python-3.12.3
+  ✅ requirements.txt      → Flask, gunicorn, etc.
+  ✅ app.py                → Uses os.environ.get("PORT")
+  ✅ CORS enabled          → from flask_cors import CORS
+
+Frontend (root):
+  ✅ package.json          → "start": "vite preview --host 0.0.0.0 --port $PORT"
+  ✅ vite.config.js        → Build output: dist
+  ✅ src/config/api.js     → API_BASE_URL from env
+  ✅ .env.production       → VITE_API_URL placeholder
+
+┌─────────────────────────────────────────────────────────────────┐
+│ 🚀 GIT COMMANDS                                                 │
+└─────────────────────────────────────────────────────────────────┘
+
+git add .
+git commit -m "Railway deployment configuration"
+git push adt main
+
+Railway auto-deploys on every push! 🎯
+
+┌─────────────────────────────────────────────────────────────────┐
+│ 🐛 TROUBLESHOOTING                                              │
+└─────────────────────────────────────────────────────────────────┘
+
+Backend not starting:
+  → Check Railway logs (Deployments tab)
+  → Verify requirements.txt is complete
+  → Ensure PORT environment variable is used
+
+Frontend shows localhost errors:
+  → Check VITE_API_URL is set in Railway
+  → Must start with VITE_ prefix
+  → Redeploy frontend after setting
+
+CORS errors:
+  → Already fixed (CORS(app) in app.py)
+  → If persists, check backend logs
+
+Data lost after restart:
+  → SQLite is ephemeral on Railway
+  → Add PostgreSQL database for persistence
+
+┌─────────────────────────────────────────────────────────────────┐
+│ 📖 DOCUMENTATION                                                │
+└─────────────────────────────────────────────────────────────────┘
+
+Full Guide:        RAILWAY_SETUP.md
+Railway Docs:      https://docs.railway.app
+Your Repo:         https://github.com/vishalharkal15/adt
+
+┌─────────────────────────────────────────────────────────────────┐
+│ 💰 PRICING                                                      │
+└─────────────────────────────────────────────────────────────────┘
+
+Free Tier:         $5/month credit
+Usage:             ~500 hours runtime
+Perfect for:       Testing & small projects
+
+Need more?         Hobby plan: $5/month per service
+
+╔══════════════════════════════════════════════════════════════════╗
+║  🎉 READY TO DEPLOY! Follow RAILWAY_SETUP.md for step-by-step  ║
+╚══════════════════════════════════════════════════════════════════╝
