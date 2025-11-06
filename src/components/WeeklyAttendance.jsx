@@ -10,6 +10,7 @@ import {
   Legend,
 } from "chart.js";
 import { FaCircleChevronLeft, FaCircleChevronRight } from "react-icons/fa6";
+import API_BASE_URL from "../config/api";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
@@ -30,7 +31,7 @@ export default function WeeklyAttendance() {
   const fetchWeekData = async () => {
     setLoading(true);
     try {
-      const res = await fetch(`https://{Yout IP}:5000/api/weekly-attendance?offset=${weekOffset}`);
+      const res = await fetch(`${API_BASE_URL}/api/weekly-attendance?offset=${weekOffset}`);
       const result = await res.json();
       setLabels(result.dates || []); // fallback if empty
       setData(result.counts || []);

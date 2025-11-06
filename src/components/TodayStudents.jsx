@@ -1,17 +1,18 @@
 // TodayStudents.jsx
 import { useEffect, useState } from "react";
-import { FiCheckCircle } from "react-icons/fi"; // tick icon
+import { FiCheckCircle } from "react-icons/fi";
+import API_BASE_URL from "../config/api";
 
 export default function TodayStudents() {
   const [count, setCount] = useState(null);
-  const [displayCount, setDisplayCount] = useState(0); // count-up animation
+  const [displayCount, setDisplayCount] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
     const fetchTodayCount = async () => {
       try {
-        const res = await fetch("https://{Yout IP}:5000/api/students-today");
+        const res = await fetch(`${API_BASE_URL}/api/students-today`);
         const data = await res.json();
         setCount(data.count);
       } catch (err) {

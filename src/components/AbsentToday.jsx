@@ -1,17 +1,18 @@
 // TodayAbsent.jsx
 import { useEffect, useState } from "react";
-import { FiAlertTriangle } from "react-icons/fi"; // exclamation icon
+import { FiXCircle } from "react-icons/fi";
+import API_BASE_URL from "../config/api";
 
-export default function TodayAbsent() {
+export default function AbsentToday() {
   const [count, setCount] = useState(null);
-  const [displayCount, setDisplayCount] = useState(0); // count-up animation
+  const [displayCount, setDisplayCount] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
     const fetchAbsentCount = async () => {
       try {
-        const res = await fetch("https://{Yout IP}:5000/api/students-absent-today");
+        const res = await fetch(`${API_BASE_URL}/api/students-absent-today`);
         const data = await res.json();
         setCount(data.count);
       } catch (err) {

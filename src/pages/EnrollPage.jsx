@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import "./EnrollPage.css";
+import API_BASE_URL from "../config/api";
 
 export default function EnrollPage() {
   const videoRef = useRef(null);
@@ -40,7 +41,7 @@ export default function EnrollPage() {
       const imageData = canvas.toDataURL("image/jpeg");
 
       try {
-        const res = await axios.post("https://{Yout IP}:5000/recognize", { image: imageData });
+        const res = await axios.post(`${API_BASE_URL}/recognize`, { image: imageData });
         setFaces(res.data.faces);
 
         ctx.lineWidth = 3;
@@ -93,7 +94,7 @@ export default function EnrollPage() {
 
   const submitEnrollment = async () => {
     try {
-      const res = await axios.post("https://{Yout IP}:5000/enroll", {
+      const res = await axios.post(`${API_BASE_URL}/enroll`, {
         name,
         mobile: mobile || null,
         email: email || null,

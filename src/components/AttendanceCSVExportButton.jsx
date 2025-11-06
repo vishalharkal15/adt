@@ -1,11 +1,12 @@
 import React from "react";
 import axios from "axios";
+import API_BASE_URL from "../config/api";
 
 export default function AttendanceCSVExportButton() {
   const handleExport = async () => {
     try {
       // 1️⃣ Fetch all attendance records from Flask
-      const res = await axios.get("https://{Yout IP}:5000/api/attendance-all", {
+      const res = await axios.get(`${API_BASE_URL}/api/attendance-all`, {
         withCredentials: false,
       });
 

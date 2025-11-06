@@ -21,8 +21,7 @@ from routes import register_routes
 register_routes(app, db, Attendance, detector, embedder)
 
 if __name__ == "__main__":
-    app.run(
-    host="0.0.0.0", 
-    port=5000, 
-    ssl_context=("./{Yout IP}.pem", "./{Yout IP}-key.pem")
-)
+    import os
+    port = int(os.environ.get("PORT", 5000))
+    # SSL disabled for Railway deployment - Railway handles HTTPS
+    app.run(host="0.0.0.0", port=port)

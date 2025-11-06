@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import API_BASE_URL from "../config/api";
 
 
 export default function AdminPage() {
@@ -24,7 +25,7 @@ export default function AdminPage() {
     setLoading(true);
 
     try {
-      const response = await fetch("https://{Yout IP}:5000/api/verify", {
+      const response = await fetch(`${API_BASE_URL}/api/verify`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ password }),

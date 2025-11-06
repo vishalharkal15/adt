@@ -1,16 +1,20 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
-import fs from 'fs';
-import path from 'path';
 
 export default defineConfig({
   plugins: [react()],
   server: {
-    host: '0.0.0.0', // allow access via LAN IP
+    host: '0.0.0.0',
     port: 5173,
-    https: {
-      key: fs.readFileSync(path.resolve(__dirname, '{Yout IP}-key.pem')),
-      cert: fs.readFileSync(path.resolve(__dirname, '{Yout IP}.pem'))
-    }
+    // SSL removed for Railway - use HTTP in development or Railway handles HTTPS
+  },
+  build: {
+    outDir: 'dist',
+    sourcemap: false,
+    minify: 'esbuild',
+  },
+  preview: {
+    host: '0.0.0.0',
+    port: 4173,
   }
 });

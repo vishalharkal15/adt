@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { FiBarChart2 } from "react-icons/fi"; // bar graph icon
+import API_BASE_URL from "../config/api";
 
 export default function TotalStudents() {
   const [count, setCount] = useState(null);
@@ -10,7 +11,7 @@ export default function TotalStudents() {
   useEffect(() => {
     const fetchTotalCount = async () => {
       try {
-        const res = await fetch("https://{Yout IP}:5000/api/total-students");
+        const res = await fetch(`${API_BASE_URL}/api/total-students`);
         const data = await res.json();
         setCount(data.count);
       } catch (err) {
